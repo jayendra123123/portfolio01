@@ -50,3 +50,17 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Loading screen animation */
+@keyframes loader-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
