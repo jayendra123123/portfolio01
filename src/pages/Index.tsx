@@ -7,9 +7,12 @@ import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 import LoadingScreen from "@/components/LoadingScreen";
+import { useLenis } from "@/hooks/useLenis";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
+
+  useLenis();
 
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
