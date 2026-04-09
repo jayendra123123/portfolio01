@@ -27,16 +27,16 @@ const Skills = () => {
   return (
     <section id="skills" className="py-24 px-6 md:px-16 bg-secondary/30">
       <div className="max-w-4xl mx-auto">
-        <ScrollReveal>
+        <ScrollReveal variant="clip">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2 uppercase tracking-tight">
-            Tech <span className="text-primary">Stack</span>
+            Tech <span className="text-primary italic font-light">Stack</span>
           </h2>
           <div className="w-16 h-1 bg-primary mb-12" />
         </ScrollReveal>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((cat, i) => (
-            <ScrollReveal key={cat.title} delay={i * 100}>
+            <ScrollReveal key={cat.title} delay={i * 100} variant="slide">
               <div>
                 <h3 className="text-foreground font-semibold text-sm uppercase tracking-widest mb-4">
                   {cat.title}
