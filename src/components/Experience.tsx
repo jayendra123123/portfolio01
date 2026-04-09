@@ -27,16 +27,16 @@ const Experience = () => {
   return (
     <section id="experience" className="py-24 px-6 md:px-16 bg-background">
       <div className="max-w-4xl mx-auto">
-        <ScrollReveal>
+        <ScrollReveal variant="clip">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2 uppercase tracking-tight">
-            Work <span className="text-primary">Experience</span>
+            Work <span className="text-primary italic font-light">Experience</span>
           </h2>
           <div className="w-16 h-1 bg-primary mb-12" />
         </ScrollReveal>
 
         <div className="space-y-10">
           {experiences.map((exp, i) => (
-            <ScrollReveal key={exp.role} delay={i * 200} direction="left">
+            <ScrollReveal key={exp.role} delay={i * 200} direction="left" variant="slide">
               <div className="border-l-2 border-primary/30 pl-6 relative">
                 <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-primary" />
                 <h3 className="text-foreground text-xl font-semibold">{exp.role}</h3>

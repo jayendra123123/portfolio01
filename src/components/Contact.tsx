@@ -4,20 +4,20 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 px-6 md:px-16 bg-background">
       <div className="max-w-4xl mx-auto text-center">
-        <ScrollReveal>
+        <ScrollReveal variant="clip">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2 uppercase tracking-tight">
-            Let's <span className="text-primary">Connect</span>
+            Let's <span className="text-primary italic font-light">Connect</span>
           </h2>
           <div className="w-16 h-1 bg-primary mb-8 mx-auto" />
         </ScrollReveal>
-        <ScrollReveal delay={150}>
+        <ScrollReveal variant="slide" delay={150}>
           <p className="text-muted-foreground text-lg font-light mb-10 max-w-xl mx-auto">
             I'm open to opportunities, collaborations, and interesting projects.
             Feel free to reach out!
           </p>
         </ScrollReveal>
 
-        <ScrollReveal delay={300}>
+        <ScrollReveal variant="fade" delay={300}>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="mailto:jayendramalla26@gmail.com"
@@ -44,7 +44,7 @@ const Contact = () => {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={400}>
+        <ScrollReveal variant="fade" delay={400}>
           <p className="text-muted-foreground/40 text-xs mt-16">
             © 2026 M Jayendra. Built with React & TypeScript.
           </p>
