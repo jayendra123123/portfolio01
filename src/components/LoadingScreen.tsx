@@ -1,68 +1,118 @@
 import { useState, useEffect } from "react";
 
 const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
-  const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<"loading" | "reveal" | "done">("loading");
+  const [phase, setPhase] = useState<"text" | "counter" | "reveal" | "done">("text");
+  const [count, setCount] = useState(0);
 
+  // Phase 1: Show text lines with stagger
   useEffect(() => {
+    const timer = setTimeout(() => setPhase("counter"), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Phase 2: Count up
+  useEffect(() => {
+    if (phase !== "counter") return;
     const interval = setInterval(() => {
-      setProgress((prev) => {
+      setCount((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
         }
-        // Accelerating progress
-        const increment = prev < 60 ? 3 : prev < 85 ? 2 : 1;
-        return Math.min(prev + increment, 100);
+        const inc = prev < 40 ? 4 : prev < 80 ? 3 : 2;
+        return Math.min(prev + inc, 100);
       });
-    }, 30);
-
+    }, 25);
     return () => clearInterval(interval);
-  }, []);
+  }, [phase]);
 
+  // Phase 3: Reveal out
   useEffect(() => {
-    if (progress === 100) {
-      setTimeout(() => setPhase("reveal"), 300);
+    if (count === 100) {
+      setTimeout(() => setPhase("reveal"), 400);
       setTimeout(() => {
         setPhase("done");
         onComplete();
-      }, 1200);
+      }, 1400);
     }
-  }, [progress, onComplete]);
+  }, [count, onComplete]);
 
   if (phase === "done") return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] bg-hero-bg flex flex-col items-center justify-center transition-all duration-700 ${
-        phase === "reveal" ? "opacity-0 scale-105" : "opacity-100 scale-100"
+      className={`fixed inset-0 z-[100] bg-hero-bg flex flex-col items-center justify-center transition-all duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
+        phase === "reveal"
+          ? "clip-path-reveal-out"
+          : ""
       }`}
+      style={
+        phase === "reveal"
+          ? { clipPath: "inset(0 0 100% 0)" }
+          : { clipPath: "inset(0 0 0% 0)" }
+      }
     >
-      {/* Logo */}
-      <div className="mb-12 overflow-hidden">
-        <h1
-          className="text-4xl md:text-6xl font-bold tracking-[-0.05em] uppercase"
-          style={{
-            animation: "loader-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-          }}
+      {/* Top label */}
+      <div className="absolute top-8 left-0 right-0 flex justify-center">
+        <p
+          className="text-muted-foreground/50 text-[10px] tracking-[0.4em] uppercase overflow-hidden"
         >
-          <span className="text-foreground">JAYENDRA</span>
-          <span className="text-primary"> DEV</span>
-        </h1>
+          <span
+            className="inline-block transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: phase === "text" && count === 0 ? "translateY(100%)" : "translateY(0)",
+              opacity: phase === "text" && count === 0 ? 0 : 1,
+              transitionDelay: "0.1s",
+            }}
+          >
+            DEVELOPER PORTFOLIO · 2026
+          </span>
+        </p>
       </div>
 
-      {/* Progress bar */}
-      <div className="w-48 md:w-64 h-[2px] bg-border rounded-full overflow-hidden">
+      {/* Center name */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="overflow-hidden">
+          <h1
+            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-foreground uppercase transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: phase === "text" && count === 0 ? "translateY(110%)" : "translateY(0)",
+              opacity: phase === "text" && count === 0 ? 0 : 1,
+              transitionDelay: "0.2s",
+            }}
+          >
+            M <span className="text-primary italic font-light">Jayendra</span>
+          </h1>
+        </div>
+
+        <div className="overflow-hidden">
+          <p
+            className="text-muted-foreground text-sm md:text-base tracking-[0.2em] uppercase font-light transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              transform: phase === "text" && count === 0 ? "translateY(110%)" : "translateY(0)",
+              opacity: phase === "text" && count === 0 ? 0 : 1,
+              transitionDelay: "0.35s",
+            }}
+          >
+            Full Stack Developer
+          </p>
+        </div>
+      </div>
+
+      {/* Bottom counter */}
+      <div className="absolute bottom-8 right-10">
+        <span className="text-foreground/30 text-7xl md:text-9xl font-bold tabular-nums tracking-tight">
+          {String(count).padStart(3, "0")}
+        </span>
+      </div>
+
+      {/* Progress line */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-border/30">
         <div
-          className="h-full bg-primary rounded-full transition-all duration-100 ease-out"
-          style={{ width: `${progress}%` }}
+          className="h-full bg-primary transition-all duration-100 ease-linear"
+          style={{ width: `${count}%` }}
         />
       </div>
-
-      {/* Percentage */}
-      <p className="text-muted-foreground text-xs tracking-[0.3em] mt-4 font-light tabular-nums">
-        {progress}%
-      </p>
     </div>
   );
 };
