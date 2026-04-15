@@ -1,26 +1,64 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
-export const useScrollReveal = (threshold = 0.15) => {
+interface ScrollRevealOptions {
+  threshold?: number;
+  rootMargin?: string;
+  triggerOnce?: boolean;
+}
+
+export const useScrollReveal = (
+  options: ScrollRevealOptions = {}
+) => {
+  const {
+    threshold = 0.15,
+    rootMargin = "0px 0px -50px 0px",
+    triggerOnce = true,
+  } = options;
+
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  const handleIntersection = useCallback(
+    ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        if (triggerOnce) {
+          observer.unobserve(entry.target);
+        }
+      } else if (!triggerOnce) {
+        setIsVisible(false);
+      }
+    },
+    [triggerOnce]
+  );
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(el);
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            if (triggerOnce) {
+              observer.unobserve(el);
+            }
+          } else if (!triggerOnce) {
+            setIsVisible(false);
+          }
+        });
       },
-      { threshold }
+      { threshold, rootMargin }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold]);
+
+    return () => {
+      if (el) observer.unobserve(el);
+      observer.disconnect();
+    };
+  }, [threshold, rootMargin, triggerOnce]);
 
   return { ref, isVisible };
 };

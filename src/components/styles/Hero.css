@@ -1,0 +1,68 @@
+.hero-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-avatar-wrapper {
+  display: none;
+  flex-shrink: 0;
+}
+
+.hero-avatar {
+  max-width: 350px;
+  height: 480px;
+  margin: 0;
+}
+
+/* Tablet - show avatar */
+@media (min-width: 768px) {
+  .hero-avatar-wrapper {
+    display: block;
+  }
+
+  .hero-avatar {
+    max-width: 300px;
+    height: 420px;
+  }
+}
+
+/* Desktop - full size */
+@media (min-width: 1024px) {
+  .hero-content-wrapper {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .hero-avatar-wrapper {
+    display: block;
+  }
+
+  .hero-avatar {
+    max-width: 400px;
+    height: 480px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-avatar {
+    max-width: 450px;
+    height: 520px;
+  }
+}
+
+/* Mobile - stack vertically, hide avatar */
+@media (max-width: 767px) {
+  .hero-content-wrapper {
+    flex-direction: column;
+  }
+
+  .hero-avatar-wrapper {
+    display: none;
+  }
+}

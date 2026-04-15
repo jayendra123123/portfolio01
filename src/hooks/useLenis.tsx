@@ -5,21 +5,33 @@ export const useLenis = () => {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    let raf: number;
 
-    requestAnimationFrame(raf);
+    const raf_callback = (time: number) => {
+      lenis.raf(time);
+      raf = requestAnimationFrame(raf_callback);
+    };
+
+    raf = requestAnimationFrame(raf_callback);
+
+    // Prevent body scroll during Lenis operation
+    const preventScroll = (e: Event) => {
+      // Allow native scroll events
+    };
 
     return () => {
+      cancelAnimationFrame(raf);
       lenis.destroy();
+      document.removeEventListener("scroll", preventScroll);
     };
   }, []);
 };
