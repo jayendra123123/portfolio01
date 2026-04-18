@@ -6,8 +6,14 @@ interface ScrollRevealProps {
   className?: string;
   delay?: number;
   direction?: "up" | "left" | "right";
+  /**
+   * `clip` used to rely on `clip-path` (expensive to animate).
+   * It now uses an overflow-hidden wrapper + transform-only animation for 60fps.
+   */
   variant?: "fade" | "clip" | "slide";
 }
+
+const EASE = "cubic-bezier(0.16,1,0.3,1)";
 
 const ScrollReveal = ({
   children,
@@ -22,70 +28,43 @@ const ScrollReveal = ({
     triggerOnce: true,
   });
 
-  const getHiddenStyles = (): React.CSSProperties => {
-    if (variant === "clip") {
-      return {
-        clipPath:
-          direction === "up"
-            ? "inset(100% 0 0 0)"
-            : direction === "left"
-            ? "inset(0 100% 0 0)"
-            : "inset(0 0 0 100%)",
-        opacity: 0,
-        willChange: "clip-path, opacity",
-      };
+  const distance = variant === "slide" ? 60 : variant === "clip" ? 90 : 30;
+
+  const offset = (() => {
+    switch (direction) {
+      case "left":
+        return { x: distance, y: 0 };
+      case "right":
+        return { x: -distance, y: 0 };
+      case "up":
+      default:
+        return { x: 0, y: distance };
     }
-    if (variant === "slide") {
-      const translate =
-        direction === "up"
-          ? "translateY(60px)"
-          : direction === "left"
-          ? "translateX(60px)"
-          : "translateX(-60px)";
-      return {
-        transform: translate,
-        opacity: 0,
-        willChange: "transform, opacity",
-      };
-    }
-    // fade (default) - removed blur for better performance
-    const translate =
-      direction === "up"
-        ? "translateY(30px)"
-        : direction === "left"
-        ? "translateX(30px)"
-        : "translateX(-30px)";
-    return {
-      transform: translate,
-      opacity: 0,
-      willChange: "transform, opacity",
-    };
+  })();
+
+  const animatedStyle: React.CSSProperties = {
+    transform: isVisible
+      ? "translate3d(0, 0, 0)"
+      : `translate3d(${offset.x}px, ${offset.y}px, 0)`,
+    opacity: isVisible ? 1 : 0,
+    transitionProperty: "transform, opacity",
+    transitionDuration: variant === "clip" ? "1000ms" : "800ms",
+    transitionTimingFunction: EASE,
+    transitionDelay: `${delay}ms`,
+    // Only hint compositing while animating in.
+    willChange: isVisible ? undefined : ("transform, opacity" as const),
   };
 
-  const getVisibleStyles = (): React.CSSProperties => {
-    if (variant === "clip") {
-      return { clipPath: "inset(0 0 0 0)", opacity: 1 };
-    }
-    return { transform: "translate(0)", opacity: 1 };
-  };
+  if (variant === "clip") {
+    return (
+      <div ref={ref} className={cn("overflow-hidden", className)}>
+        <div style={animatedStyle}>{children}</div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "transition-all ease-[cubic-bezier(0.16,1,0.3,1)]",
-        className
-      )}
-      style={{
-        ...(isVisible ? getVisibleStyles() : getHiddenStyles()),
-        transitionDuration: variant === "clip" ? "1s" : "0.8s",
-        transitionDelay: `${delay}ms`,
-        // Enable GPU acceleration
-        backfaceVisibility: "hidden",
-        WebkitBackfaceVisibility: "hidden",
-        perspective: 1000,
-      }}
-    >
+    <div ref={ref} className={cn(className)} style={animatedStyle}>
       {children}
     </div>
   );

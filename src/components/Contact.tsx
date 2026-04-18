@@ -31,7 +31,7 @@ const Contact = () => {
   ];
 
   return (
-    <footer id="contact" className="py-20 md:py-24 px-6 md:px-16 bg-background border-t border-border/50">
+    <footer id="contact" className="py-20 md:py-24 px-6 md:px-16 bg-background">
       <div className="max-w-5xl mx-auto">
         <ScrollReveal variant="clip">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-2 uppercase tracking-tight">

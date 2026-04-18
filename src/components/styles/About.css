@@ -16,7 +16,7 @@
 
 .about-person-image {
   width: 100%;
-  height: 620px;
+  height: 460px;
 }
 
 @media (min-width: 1024px) {
@@ -39,6 +39,7 @@
   }
 
   .about-person-image {
-    height: 650px;
+    height: 560px;
+    margin-top: 0;
   }
 }

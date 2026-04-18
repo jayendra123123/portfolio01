@@ -5,14 +5,12 @@ import About from "@/components/About";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
+import CurvedSectionConnector from "@/components/CurvedSectionConnector";
 import Contact from "@/components/Contact";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useLenis } from "@/hooks/useLenis";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
-
-  useLenis();
 
   const handleLoadComplete = useCallback(() => {
     setLoaded(true);
@@ -26,7 +24,15 @@ const Index = () => {
       <About />
       <Projects />
       <Experience />
+      <CurvedSectionConnector className="bg-secondary/30" variant="arc" direction="down" bend={0.75} />
       <Skills />
+      <CurvedSectionConnector
+        className="bg-background"
+        variant="arc"
+        direction="down"
+        bend={0.75}
+        fromFill="hsl(var(--secondary) / 0.3)"
+      />
       <Contact />
     </div>
   );

@@ -60,57 +60,17 @@
   }
 }
 
-/* GPU Acceleration for smooth animations */
-.transition-all,
-[class*="transition-"],
-[style*="transform"],
-[style*="will-change"] {
-  will-change: auto;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Optimize animations for 60fps */
+/* Smooth anchor scrolling + GPU-friendly transforms (respects reduced motion) */
 @media (prefers-reduced-motion: no-preference) {
-  * {
+  html {
     scroll-behavior: smooth;
   }
-}
 
-/* Lenis smooth scrolling - optimized */
-html.lenis, html.lenis body {
-  height: auto;
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Optimize transform-based animations */
-@media (prefers-reduced-motion: no-preference) {
   .transform-gpu {
     transform: translate3d(0, 0, 0);
   }
 }
 
-/* High-performance motion elements */
-[style*="transform"] {
-  will-change: transform;
-}
 
 /* Disable cursor for drag operations */
 body.grabbing * {

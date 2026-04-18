@@ -1,7 +1,4 @@
 import ScrollReveal from "@/components/ScrollReveal";
-import ParallaxImage from "@/components/ParallaxImage";
-import "./styles/ParallaxImage.css";
-import "./styles/About.css";
 
 const About = () => {
   return (
@@ -14,8 +11,27 @@ const About = () => {
           <div className="w-16 h-1 bg-primary mb-8" />
         </ScrollReveal>
 
-        <div className="about-content">
-          <div className="about-text">
+        {/* Responsive layout
+            - Mobile: stack (text first)
+            - Desktop: 2 columns with image on the left
+            - Image height matches the text column height (no fixed heights)
+        */}
+        <div className="flex flex-col lg:flex-row lg:gap-12 gap-10">
+          {/* Image (left on desktop) */}
+          <div className="order-2 lg:order-1 lg:basis-5/12 lg:shrink-0">
+            <div className="relative w-full overflow-hidden rounded-lg shadow-lg aspect-[4/5] lg:aspect-auto lg:h-full">
+              <img
+                src="/images/person.png"
+                alt="Jayendra - Full Stack Developer"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Text (right on desktop) */}
+          <div className="order-1 lg:order-2 lg:flex-1">
             <ScrollReveal variant="slide" delay={150}>
               <p className="text-muted-foreground text-lg font-light leading-relaxed mb-6">
                 I'm a Full Stack Developer specializing in the MERN stack with a passion for
@@ -31,15 +47,6 @@ const About = () => {
                 queries, AI-driven features, and CI/CD pipelines — always focused on doing things right.
               </p>
             </ScrollReveal>
-          </div>
-
-          <div className="about-image-section">
-            <ParallaxImage 
-              src="/images/person.png" 
-              alt="Jayendra - Full Stack Developer"
-              speed={1}
-              className="about-person-image"
-            />
           </div>
         </div>
       </div>

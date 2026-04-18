@@ -78,12 +78,25 @@ export default {
           to: { height: "0" },
         },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(20px)", filter: "blur(4px)" },
-          "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0)" },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+
+        "curve-draw": {
+          to: { "stroke-dashoffset": "0" },
+        },
+
+        typewriter: {
+          from: { width: "0" },
+          to: { width: "var(--tw-typewriter-width, 16ch)" },
+        },
+        "caret-blink": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
         },
       },
       animation: {
@@ -91,6 +104,12 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-up": "fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "fade-in": "fade-in 0.5s ease-out forwards",
+
+        "curve-draw": "curve-draw 1.2s ease-out both",
+
+        typewriter:
+          "typewriter var(--tw-typewriter-duration, 1.5s) steps(var(--tw-typewriter-steps, 16), end) var(--tw-typewriter-delay, 0s) forwards",
+        "caret-blink": "caret-blink 0.9s steps(1) infinite",
       },
     },
   },

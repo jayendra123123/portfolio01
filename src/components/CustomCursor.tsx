@@ -22,11 +22,23 @@ const CustomCursor: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const hoveringRef = useRef(false);
 
-  // Memoized mouse move handler with requestAnimationFrame
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    rawX.set(e.clientX - 8);
-    rawY.set(e.clientY - 8);
-  }, [rawX, rawY]);
+  const rafRef = useRef<number | null>(null);
+  const latestPosRef = useRef({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      latestPosRef.current.x = e.clientX - 8;
+      latestPosRef.current.y = e.clientY - 8;
+
+      if (rafRef.current !== null) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        rawX.set(latestPosRef.current.x);
+        rawY.set(latestPosRef.current.y);
+      });
+    },
+    [rawX, rawY]
+  );
 
   // Optimized hover detection using event delegation
   const handleMouseEnter = useCallback((e: MouseEvent) => {
@@ -73,6 +85,10 @@ const CustomCursor: React.FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseenter", handleMouseEnter, true);
       document.removeEventListener("mouseleave", handleMouseLeave, true);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [handleMouseMove, handleMouseEnter, handleMouseLeave]);
 
@@ -84,15 +100,10 @@ const CustomCursor: React.FC = () => {
         y: springY,
         width: "16px",
         height: "16px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
         borderRadius: "50%",
-        mixBlendMode: "screen",
         zIndex: 9999,
-        boxShadow: "0 0 6px rgba(255, 255, 255, 0.8)",
         willChange: "transform",
-        backfaceVisibility: "hidden",
-        WebkitBackfaceVisibility: "hidden",
-        perspective: 1000,
       }}
       animate={{
         scale: isHovering ? 2.5 : 1,

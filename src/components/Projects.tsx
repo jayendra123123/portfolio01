@@ -53,10 +53,15 @@ const Projects = () => {
               <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${i % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
                 {/* Image/Visual Section */}
                 <div className={`relative group cursor-pointer ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <div
-                    className="relative h-64 md:h-80 rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${project.image})` }}
-                  >
+                  <div className="relative h-64 md:h-80 rounded-lg overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} preview`}
+                      className="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                    />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                     
                     {/* Hover overlay */}
